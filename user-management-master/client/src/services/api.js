@@ -31,8 +31,12 @@ api.interceptors.response.use(
       originalRequest._retry = true
 
       try {
+        const refreshEndpoint = window.location.pathname.startsWith("/admin")
+          ? "/admin/refresh"
+          : "/auth/refresh"
+
         const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/auth/refresh`,
+          `${import.meta.env.VITE_API_URL}${refreshEndpoint}`,
           {},
           { withCredentials: true }
         )

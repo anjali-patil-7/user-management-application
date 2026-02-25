@@ -73,9 +73,11 @@ exports.loginUser = async (req, res) => {
   const accessToken = generateAccessToken(user)
   const refreshToken = generateRefreshToken(user)
 
-  res.cookie("refreshToken", refreshToken, {
+  const cookieName = user.role === "admin" ? "adminRefreshToken" : "refreshToken"
+
+  res.cookie(cookieName, refreshToken, {
     httpOnly: true,
-    secure: false,
+    secure: false, // Set to true in production
     sameSite: "strict",
   })
 
@@ -128,5 +130,6 @@ exports.refreshToken = async (req, res) => {
 // Logout
 exports.logoutUser = (req, res) => {
   res.clearCookie("refreshToken")
+  res.clearCookie("adminRefreshToken")
   res.json({ message: "Logged out successfully" })
 }

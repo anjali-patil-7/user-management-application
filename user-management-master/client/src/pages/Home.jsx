@@ -18,7 +18,7 @@ function Home() {
             Logged in as: <strong>{user?.email}</strong>
           </p>
 
-        
+        <p>welcome  {user.name} </p>
         </div>
       </div>
     </>

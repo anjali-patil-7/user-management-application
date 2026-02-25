@@ -18,6 +18,8 @@ router.route("/users/:id")
 
 router.patch("/users/:id/toggle-block", protect, admin, adminController.toggleBlockUser)
 
+router.post("/refresh", adminController.refreshAdminToken)
+
 module.exports = router
 
 

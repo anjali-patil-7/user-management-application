@@ -75,7 +75,6 @@ function Register() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
-      toast.error("Please fix the validation errors")
       return
     }
 

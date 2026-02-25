@@ -12,13 +12,17 @@ import PublicRoute from "./components/PublicRoute"
 import NotFound from "./pages/NotFound"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { refreshUser } from "./features/auth/authSlice"
+import { refreshUser, refreshAdminToken } from "./features/auth/authSlice"
 
 function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(refreshUser())
+    if (window.location.pathname.startsWith("/admin")) {
+      dispatch(refreshAdminToken())
+    } else {
+      dispatch(refreshUser())
+    }
   }, [dispatch])
   return (
     <BrowserRouter>

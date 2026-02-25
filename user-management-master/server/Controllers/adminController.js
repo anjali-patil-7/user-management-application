@@ -157,3 +157,32 @@ exports.toggleBlockUser = async (req, res) => {
   }
 }
 
+// REFRESH ADMIN TOKEN
+exports.refreshAdminToken = async (req, res) => {
+  const token = req.cookies.adminRefreshToken
+  if (!token)
+    return res.status(401).json({ message: "No admin refresh token" })
+
+  jwt.verify(token, process.env.REFRESH_SECRET, async (err, decoded) => {
+    if (err)
+      return res.status(403).json({ message: "Invalid admin refresh token" })
+
+    const user = await User.findById(decoded.id).select("-password")
+    if (!user || user.role !== "admin") {
+      return res.status(404).json({ message: "Admin not found" })
+    }
+
+    const { generateAccessToken } = require("../utils/generateToken")
+    const newAccessToken = generateAccessToken(user)
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      profileImage: user.profileImage,
+      role: user.role,
+      accessToken: newAccessToken,
+    })
+  })
+}
+

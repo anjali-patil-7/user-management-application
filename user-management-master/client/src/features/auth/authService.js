@@ -38,3 +38,9 @@ export const refresh = async () => {
   const res = await api.post("auth/refresh")
   return res.data
 }
+
+// Refresh admin token
+export const refreshAdmin = async () => {
+  const res = await api.post("admin/refresh")
+  return res.data
+}

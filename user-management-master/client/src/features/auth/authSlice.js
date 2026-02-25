@@ -61,6 +61,18 @@ export const refreshUser = createAsyncThunk(
   }
 )
 
+// create refreshAdminToken thunk
+export const refreshAdminToken = createAsyncThunk(
+  "auth/refreshAdmin",
+  async (_, thunkAPI) => {
+    try {
+      return await authService.refreshAdmin()
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Admin session expired")
+    }
+  }
+)
+
 
 const authSlice = createSlice({
   name: "auth",
@@ -125,6 +137,21 @@ const authSlice = createSlice({
         state.isAuthChecked = true
       })
       .addCase(refreshUser.rejected, (state) => {
+        state.isLoading = false
+        state.accessToken = null
+        state.user = null
+        state.isAuthChecked = true
+      })
+      .addCase(refreshAdminToken.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(refreshAdminToken.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.user = action.payload
+        state.accessToken = action.payload.accessToken
+        state.isAuthChecked = true
+      })
+      .addCase(refreshAdminToken.rejected, (state) => {
         state.isLoading = false
         state.accessToken = null
         state.user = null
